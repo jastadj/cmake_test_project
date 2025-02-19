@@ -1,19 +1,7 @@
-set(MODULE_NAME "mathlib")
-set(MODULE_NAMESPACE "mathlib::")
+set(MODULE_NAME "mylib")
+set(MODULE_NAMESPACE "mylib::")
 set(MODULE_ALIAS "${MODULE_NAMESPACE}${MODULE_NAME}")
-set(MODULE_EXPORT "mathlibexport")
-
-CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
-PROJECT(${MODULE_NAME} LANGUAGES C CXX VERSION 1.0)
-
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/buildoutput")
-
-if(BUILD_SHARED_LIBS)
-	add_compile_definitions(MATHLIB_DLL)
-else()
-	add_compile_definitions(MATHLIB_STATIC)
-endif()
+set(MODULE_EXPORT "myliblibexport")
 
 file(GLOB PROJECT_SOURCES
 	"${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
@@ -27,12 +15,22 @@ file(GLOB PUBLIC_HEADERS
 	"${CMAKE_CURRENT_LIST_DIR}/include/*.h"
 )
 
-add_library(${MODULE_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PUBLIC_HEADERS})
+if(BUILD_STATIC)
+	add_library(${MODULE_NAME} STATIC ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PUBLIC_HEADERS})
+else()
+	add_library(${MODULE_NAME} SHARED ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PUBLIC_HEADERS})
+endif()
+
 add_library(${MODULE_ALIAS} ALIAS ${MODULE_NAME})
 
 set_target_properties(${MODULE_NAME} PROPERTIES
 	PUBLIC_HEADER ${PUBLIC_HEADERS}
 	)
+
+target_link_libraries(${MODULE_NAME}
+	PRIVATE
+		mathlib
+)
 
 target_include_directories(${MODULE_NAME}
 	PUBLIC		

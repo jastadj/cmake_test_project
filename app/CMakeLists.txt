@@ -2,10 +2,13 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
 PROJECT(app C CXX)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
 
-find_package(mathlib CONFIG REQUIRED
+add_compile_definitions(MYLIB_STATIC)
+
+find_package(mylib CONFIG REQUIRED
 	HINTS
-		${CMAKE_CURRENT_LIST_DIR}/../mathlib/build/buildoutput/lib/cmake
+		${CMAKE_CURRENT_LIST_DIR}/../mylib/build/buildoutput/lib/cmake
 )
 
 file(GLOB PROJECT_SOURCES
@@ -19,5 +22,14 @@ file(GLOB PROJECT_HEADERS
 add_executable(app ${PROJECT_SOURCES} ${PROJECT_HEADERS})
 
 target_link_libraries(app
-	mathlib::mathlib
+	mylib::mylib
 )
+
+install(
+	TARGETS app
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	)
+
+install(FILES $<TARGET_RUNTIME_DLLS:app> TYPE BIN)
