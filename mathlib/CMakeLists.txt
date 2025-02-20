@@ -1,7 +1,7 @@
 set(MODULE_NAME "mathlib")
 set(MODULE_NAMESPACE "mathlib::")
 set(MODULE_ALIAS "${MODULE_NAMESPACE}${MODULE_NAME}")
-set(MODULE_EXPORT "mathlibexport")
+set(MODULE_EXPORT "${MODULE_NAME}export")
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
 PROJECT(${MODULE_NAME} LANGUAGES C CXX VERSION 1.0)
@@ -42,11 +42,6 @@ target_include_directories(${MODULE_NAME}
 
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
-
-#install(
-#	DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include
-#	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-#)
 
 install(
 	TARGETS ${MODULE_NAME}

@@ -6,10 +6,7 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
 
 add_compile_definitions(MYLIB_STATIC)
 
-find_package(mylib CONFIG REQUIRED
-	HINTS
-		${CMAKE_CURRENT_LIST_DIR}/../mylib/build/buildoutput/lib/cmake
-)
+find_package(mylib REQUIRED)
 
 file(GLOB PROJECT_SOURCES
 	"${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
