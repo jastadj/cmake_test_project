@@ -7,6 +7,7 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
 add_compile_definitions(MYLIB_STATIC)
 
 find_package(mylib REQUIRED)
+find_package(headerlib REQUIRED)
 
 file(GLOB PROJECT_SOURCES
 	"${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
@@ -20,6 +21,7 @@ add_executable(app ${PROJECT_SOURCES} ${PROJECT_HEADERS})
 
 target_link_libraries(app
 	mylib::mylib
+	headerlib::headerlib
 )
 
 install(
