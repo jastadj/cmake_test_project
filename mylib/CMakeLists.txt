@@ -32,7 +32,11 @@ file(GLOB PUBLIC_HEADERS
 	"${CMAKE_CURRENT_LIST_DIR}/include/*.h"
 )
 
-add_library(${MODULE_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PUBLIC_HEADERS})
+add_subdirectory(modules)
+
+add_library(${MODULE_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PUBLIC_HEADERS}
+	$<TARGET_OBJECTS:modulea>
+)
 add_library(${MODULE_ALIAS} ALIAS ${MODULE_NAME})
 
 set_target_properties(${MODULE_NAME} PROPERTIES
@@ -41,7 +45,7 @@ set_target_properties(${MODULE_NAME} PROPERTIES
 
 target_link_libraries(${MODULE_NAME}
 	PRIVATE
-		mathlib::mathlib
+		mathlib::mathlib		
 )
 
 target_include_directories(${MODULE_NAME}
@@ -49,6 +53,8 @@ target_include_directories(${MODULE_NAME}
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
         $<INSTALL_INTERFACE:include>
 		${mathlib_INCLUDE_DIRS}
+	PRIVATE
+		$<TARGET_PROPERTY:modulea,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 ####################

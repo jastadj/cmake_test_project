@@ -48,6 +48,10 @@ int main(int argc, char* argv[])
 		{
 			printCar(carmodel);
 		}
+		else if(words[0] == "accounts")
+		{
+			std::cout << "Total Accounts: " << MyLib::getTotalAccounts() << std::endl;
+		}
 
 	}
 	

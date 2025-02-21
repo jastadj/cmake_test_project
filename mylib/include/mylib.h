@@ -19,6 +19,8 @@ namespace MyLib
 {
 	MYLIB_API const char* getVersion();
     MYLIB_API int getMagic();
+	
+	MYLIB_API int getTotalAccounts();
 };
 
 #endif

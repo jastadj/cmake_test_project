@@ -1,6 +1,7 @@
 #include "mylib.h"
 
 #include "mymath.h"
+#include "modulea.h"
 
 using namespace MyLib;
 
@@ -12,4 +13,9 @@ const char* MyLib::getVersion()
 int MyLib::getMagic()
 {
 	return multiply_int(5, 5);
+}
+
+int MyLib::getTotalAccounts()
+{
+	return getModuleAValue();
 }
