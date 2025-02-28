@@ -4,24 +4,23 @@ PROJECT(app C CXX)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
 
-add_compile_definitions(MYLIB_STATIC)
+set(PROJECT_SOURCES
+	${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
+	${CMAKE_CURRENT_LIST_DIR}/src/tools.cpp
+	${CMAKE_CURRENT_LIST_DIR}/src/tools.h
+	${CMAKE_CURRENT_LIST_DIR}/src/dirent.h
+)
 
-find_package(mylib REQUIRED)
-find_package(headerlib REQUIRED)
+set(PROJECT_HEADERS
+)
 
-file(GLOB PROJECT_SOURCES
-	"${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
-	)
-
-file(GLOB PROJECT_HEADERS
-	"${CMAKE_CURRENT_LIST_DIR}/include/*.h"
-	)
+find_package(mylib REQUIRED HINTS ${CMAKE_SOURCE_DIR}/../mylib/build/buildoutput/lib/cmake)
+find_package(mathlib REQUIRED HINTS ${CMAKE_SOURCE_DIR}/../mathlib/build/buildoutput/lib/cmake)
 
 add_executable(app ${PROJECT_SOURCES} ${PROJECT_HEADERS})
 
 target_link_libraries(app
 	mylib::mylib
-	headerlib::headerlib
 )
 
 install(

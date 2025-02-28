@@ -7,4 +7,6 @@
 
 int getModuleAValue();
 
+int getCounter();
+
 #endif

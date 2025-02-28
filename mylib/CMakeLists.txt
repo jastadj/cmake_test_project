@@ -1,7 +1,7 @@
 set(MODULE_NAME "mylib")
 set(MODULE_NAMESPACE "mylib::")
 set(MODULE_ALIAS "${MODULE_NAMESPACE}${MODULE_NAME}")
-set(MODULE_EXPORT "${MODULE_NAME}export")
+set(MODULE_EXPORT "mylibexport")
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
 PROJECT(${MODULE_NAME} LANGUAGES C CXX VERSION 1.0)
@@ -9,16 +9,22 @@ PROJECT(${MODULE_NAME} LANGUAGES C CXX VERSION 1.0)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/buildoutput")
 
+option(EXPORT_MODULE "Exports static modules" ON)
+
 if(BUILD_SHARED_LIBS)
-	add_compile_definitions(MYLIB_STATIC)
-else()
+	set(EXPORT_MODULE OFF)
 	add_compile_definitions(MYLIB_DLL)
+else()
+	add_compile_definitions(MYLIB_STATIC)
 endif()
 
 add_compile_definitions(MATHLIB_STATIC)
 
 # FIND MATHLIB PACKAGE
-find_package(mathlib REQUIRED)
+find_package(mathlib REQUIRED
+	HINTS
+		${CMAKE_SOURCE_DIR}/../mathlib/build/buildoutput/lib/cmake/mathlib
+)
 
 file(GLOB PROJECT_SOURCES
 	"${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
@@ -34,9 +40,7 @@ file(GLOB PUBLIC_HEADERS
 
 add_subdirectory(modules)
 
-add_library(${MODULE_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PUBLIC_HEADERS}
-	$<TARGET_OBJECTS:modulea>
-)
+add_library(${MODULE_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PUBLIC_HEADERS})
 add_library(${MODULE_ALIAS} ALIAS ${MODULE_NAME})
 
 set_target_properties(${MODULE_NAME} PROPERTIES
@@ -45,7 +49,10 @@ set_target_properties(${MODULE_NAME} PROPERTIES
 
 target_link_libraries(${MODULE_NAME}
 	PRIVATE
-		mathlib::mathlib		
+		mathlib::mathlib
+		modulea
+		moduleb
+		modulec
 )
 
 target_include_directories(${MODULE_NAME}
@@ -82,12 +89,12 @@ export(
 install(
 	EXPORT ${MODULE_EXPORT}
 	NAMESPACE ${MODULE_NAMESPACE}
-	FILE ${MODULE_NAME}-targets.cmake
+	FILE ${MODULE_NAME}Targets.cmake
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${MODULE_NAME}
 )
 
 install(
 	FILES
-		${CMAKE_CURRENT_LIST_DIR}/cmake/${MODULE_NAME}-config.cmake
+		${CMAKE_CURRENT_LIST_DIR}/cmake/${MODULE_NAME}Config.cmake
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${MODULE_NAME}
 )

@@ -1,4 +1,4 @@
-set(MODULE_NAME "modulea")
+set(MODULE_NAME "moduleb")
 set(MODULE_NAMESPACE "mylib::")
 set(MODULE_ALIAS "${MODULE_NAMESPACE}${MODULE_NAME}")
 
@@ -7,16 +7,14 @@ if(NOT DEFINED MODULE_EXPORT)
 endif()
 
 set(PROJECT_SOURCES
-	${CMAKE_CURRENT_LIST_DIR}/src/modulea.cpp
-	${CMAKE_CURRENT_LIST_DIR}/src/account.cpp
+	${CMAKE_CURRENT_LIST_DIR}/src/moduleb.cpp
 )
 
 set(PROJECT_HEADERS
-	${CMAKE_CURRENT_LIST_DIR}/src/account.h
 )
 	
 set(PROJECT_PUBLIC_HEADERS
-	${CMAKE_CURRENT_LIST_DIR}/include/modulea.h
+	${CMAKE_CURRENT_LIST_DIR}/include/moduleb.h
 )
 
 add_library(${MODULE_NAME} STATIC ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PROJECT_PUBLIC_HEADERS})
@@ -28,7 +26,7 @@ set_target_properties(${MODULE_NAME} PROPERTIES
 
 target_link_libraries(${MODULE_NAME}
 	PRIVATE
-		moduleb
+		modulec
 )
 
 target_include_directories(${MODULE_NAME}
@@ -44,7 +42,7 @@ target_include_directories(${MODULE_NAME}
 if(EXPORT_MODULE)
 	include(CMakePackageConfigHelpers)
 	include(GNUInstallDirs)
-	
+
 	install(
 		TARGETS ${MODULE_NAME}
 		EXPORT ${MODULE_EXPORT}
